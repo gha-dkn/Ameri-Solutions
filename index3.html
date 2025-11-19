@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ameri Solutions - Advanced Home & IT Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: conic-gradient(from 180deg at 50% 50%, #16abff33 0deg, #0885ff33 55deg, #54d6ff33 120deg, #0071ff33 160deg, transparent 360deg);
+        }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Noise Texture for "Film Grain" look */
+        .bg-noise {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Animations */
+        .fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .hover-glow { transition: all 0.3s ease; }
+        .hover-glow:hover {
+            box-shadow: 0 0 40px -10px rgba(37, 99, 235, 0.3);
+            border-color: rgba(37, 99, 235, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: #3b82f6; transition: width 0.3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link.active { color: #60a5fa; }
+        
+        /* Social Icon Brightness */
+        .social-icon { transition: all 0.3s ease; }
+        .social-icon:hover { transform: translateY(-3px); filter: brightness(1.2); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen selection:bg-blue-500 selection:text-white">
+
+    <!-- Noise Overlay -->
+    <div class="bg-noise"></div>
+
+    <!-- Advanced Navigation -->
+    <nav class="glass-nav fixed w-full top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                <div class="flex items-center group cursor-pointer" onclick="navigateTo('home')">
+                    <div class="relative">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-200"></div>
+                        <!-- Large Logo -->
+                        <img src="IMG_0505.JPG" alt="Ameri Solutions Logo" class="relative h-20 w-auto object-contain mix-blend-screen rounded-md">
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-link text-slate-300 hover:text-white px-1 py-2 text-sm font-medium tracking-wide transition-colors">HOME</button>
+                    <button onclick="navigateTo('about')" id="nav-about" class="nav-link text-slate-300 hover:text-white px-1 py-2 text-sm font-medium tracking-wide transition-colors">ABOUT US</button>
+                    <button onclick="navigateTo('services')" id="nav-services" class="nav-link text-slate-300 hover:text-white px-1 py-2 text-sm font-medium tracking-wide transition-colors">SERVICES</button>
+                    <button onclick="navigateTo('projects')" id="nav-projects" class="nav-link text-slate-300 hover:text-white px-1 py-2 text-sm font-medium tracking-wide transition-colors">PROJECTS</button>
+                    <button onclick="navigateTo('contact')" id="nav-contact" class="nav-link text-slate-300 hover:text-white px-1 py-2 text-sm font-medium tracking-wide transition-colors">CONTACT</button>
+                    
+                    <!-- Animated Call Button -->
+                    <a href="tel:2024406897" class="group relative inline-flex items-center justify-center px-6 py-2 overflow-hidden font-bold text-white rounded-full bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 transition-all duration-300 shadow-lg shadow-green-500/30 hover:shadow-green-500/50">
+                        <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full opacity-10 group-hover:w-56 group-hover:h-56"></span>
+                        <span class="relative flex items-center gap-2">
+                            <i data-lucide="phone-call" class="w-4 h-4 animate-pulse"></i> Call Now
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center gap-4">
+                    <a href="tel:2024406897" class="bg-green-600 text-white p-2 rounded-full shadow-lg shadow-green-500/20">
+                        <i data-lucide="phone" class="w-5 h-5"></i>
+                    </a>
+                    <button onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white p-2 transition-colors">
+                        <i data-lucide="menu" class="w-7 h-7"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900/95 backdrop-blur-xl border-t border-white/10 absolute w-full">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Home</button>
+                <button onclick="navigateTo('about'); toggleMobileMenu()" class="block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">About Us</button>
+                <button onclick="navigateTo('services'); toggleMobileMenu()" class="block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Services</button>
+                <button onclick="navigateTo('projects'); toggleMobileMenu()" class="block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Projects</button>
+                <button onclick="navigateTo('contact'); toggleMobileMenu()" class="block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Contact Us</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="content-area" class="flex-grow pt-24">
+        <!-- Injected via JS -->
+    </main>
+
+    <!-- Advanced Footer -->
+    <footer class="glass-panel mt-auto relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3">
+                        <img src="IMG_0505.JPG" alt="Ameri Solutions Logo" class="h-20 w-auto rounded-lg shadow-lg shadow-blue-900/20 mix-blend-screen">
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">Your trusted partner for home maintenance, landscaping, and IT solutions. Quality craftsmanship meets modern technology.</p>
+                    
+                    <!-- Brighter Social Media Icons -->
+                    <div class="pt-2">
+                        <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Follow Us</h5>
+                        <div class="flex gap-4">
+                            <a href="https://www.facebook.com/Ghafor.ameri" class="p-2 bg-blue-600/80 text-white rounded-full social-icon shadow-lg shadow-blue-500/20" aria-label="Facebook">
+                                <i data-lucide="facebook" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="p-2 bg-pink-600/80 text-white rounded-full social-icon shadow-lg shadow-pink-500/20" aria-label="Instagram">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="p-2 bg-sky-500/80 text-white rounded-full social-icon shadow-lg shadow-sky-500/20" aria-label="Twitter">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </a>
+                            <a href="https://nextdoor.com/pages/ameri-solutions?utm_campaign=1763574786791&share_action_id=b654bdc8-b330-49c0-8dfe-b1fa559de221" class="p-2 bg-green-600/80 text-white rounded-full social-icon shadow-lg shadow-green-500/20" aria-label="Nextdoor">
+                                <i data-lucide="home" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6 text-white tracking-wide border-b border-white/10 pb-2 inline-block">QUICK LINKS</h4>
+                    <ul class="space-y-3 text-sm text-slate-400">
+                        <li><button onclick="navigateTo('home')" class="hover:text-blue-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> Home</button></li>
+                        <li><button onclick="navigateTo('about')" class="hover:text-blue-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> About Us</button></li>
+                        <li><button onclick="navigateTo('services')" class="hover:text-blue-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> Services</button></li>
+                        <li><button onclick="navigateTo('projects')" class="hover:text-blue-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> Projects</button></li>
+                        <li><button onclick="navigateTo('contact')" class="hover:text-blue-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> Contact</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6 text-white tracking-wide border-b border-white/10 pb-2 inline-block">CONTACT INFO</h4>
+                    <ul class="space-y-4 text-sm text-slate-400">
+                        <li class="flex items-center gap-3 group cursor-pointer">
+                            <div class="p-2 bg-white/5 rounded-lg group-hover:bg-blue-600/20 transition-colors"><i data-lucide="phone" class="w-4 h-4 text-blue-400"></i></div>
+                            <a href="tel:2024406897" class="hover:text-blue-400 transition-colors">(202) 440-6897</a>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-pointer">
+                            <div class="p-2 bg-white/5 rounded-lg group-hover:bg-blue-600/20 transition-colors"><i data-lucide="mail" class="w-4 h-4 text-blue-400"></i></div>
+                            <a href="mailto:info@amerisolutions.com" class="hover:text-blue-400 transition-colors">info@amerisolutions.com</a>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-pointer">
+                            <div class="p-2 bg-white/5 rounded-lg group-hover:bg-blue-600/20 transition-colors"><i data-lucide="map-pin" class="w-4 h-4 text-blue-400"></i></div>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Clarksburg,+Maryland" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors">Clarksburg, Maryland</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-12 pt-8 text-center text-slate-500 text-xs uppercase tracking-widest">
+                &copy; 2025 Ameri Solutions. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Advanced Project Modal -->
+    <div id="project-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div class="glass-panel rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl shadow-black/50 transform transition-all scale-95" id="modal-content">
+            <!-- Image Section -->
+            <div class="w-full md:w-3/5 bg-black relative group">
+                <img id="modal-image" src="" alt="Project Detail" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            </div>
+            <!-- Content Section -->
+            <div class="w-full md:w-2/5 p-8 md:p-10 flex flex-col relative bg-slate-900/50">
+                <button onclick="closeProjectModal()" class="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-white"></i>
+                </button>
+                
+                <div class="mb-6">
+                    <span id="modal-category" class="inline-block px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 backdrop-blur-sm border border-white/10">Category</span>
+                    <h3 id="modal-title" class="text-3xl font-bold text-white leading-tight">Project Title</h3>
+                </div>
+                
+                <div class="prose prose-invert prose-sm text-slate-300 flex-grow overflow-y-auto custom-scrollbar pr-2">
+                    <p id="modal-description" class="leading-relaxed">Description goes here...</p>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-white/10">
+                    <a href="tel:2024406897" class="group flex items-center justify-center w-full bg-blue-600 hover:bg-blue-500 text-white text-center font-bold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40">
+                        <span class="mr-2">Start a Similar Project</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Data
+        const projectsData = [
+             {
+                title: "Custom Fireplace Drywall",
+                category: "Drywall",
+                image: "IMG_0429.jpeg",
+                shortDesc: "Custom drywall framing and finishing for fireplace renovation.",
+                fullDesc: "Complete installation of drywall for a custom fireplace surround. This project involved precision framing, hanging, and finishing the drywall to create a perfectly smooth surface, ready for the final stone veneer or paint application. We ensured proper spacing and fire-safety clearances for the insert."
+            },
+            {
+                title: "Commercial Signage",
+                category: "Handyman",
+                image: "IMG_1898.jpeg",
+                shortDesc: "Precision mounting and installation of exterior medical center signage.",
+                fullDesc: "Professional installation of acrylic exterior signage on a brick facade. We used heavy-duty standoffs to create a modern 'floating' effect while ensuring the sign is securely anchored to withstand weather conditions."
+            },
+            {
+                title: "Estate Maintenance",
+                category: "Landscaping",
+                image: "IMG_0787.jpeg",
+                shortDesc: "Large-scale mowing and groundskeeping for expansive properties.",
+                fullDesc: "Comprehensive grounds maintenance for a large estate. Our service included precision mowing of vast lawn areas, edge trimming along driveways, and debris removal to keep the property looking pristine."
+            },
+            {
+                title: "Furniture Assembly",
+                category: "Assembly",
+                image: "IMG_1980.jpeg",
+                shortDesc: "Expert assembly of complex outdoor furniture and heating units.",
+                fullDesc: "Assembly of a high-end outdoor fire table and patio furniture set. We handle the unboxing, complex assembly of gas lines and structural components, and dispose of all packaging materials so you can enjoy your patio immediately."
+            },
+            {
+                title: "Garden Care",
+                category: "Gardening",
+                image: "IMG_1941.jpeg",
+                shortDesc: "Seasonal plant care, potting, and patio organization services.",
+                fullDesc: "A seasonal refresh for a residential patio garden. This involved repotting plants into decorative containers, pruning existing shrubs, and organizing the layout to maximize sunlight exposure and aesthetic appeal."
+            },
+            {
+                title: "Exterior Repairs",
+                category: "Repairs",
+                image: "IMG_1909.jpeg",
+                shortDesc: "Assessment and repair of garage doors and exterior home fixtures.",
+                fullDesc: "Repair of a damaged sectional garage door. We assessed the structural integrity of the bent panels, realigned the tracks, and ensured the door opened and closed smoothly and safely."
+            },
+            {
+                title: "Logistics & Hauling",
+                category: "Hauling",
+                image: "IMG_2043.jpeg",
+                shortDesc: "Secure transport and delivery of large appliances and equipment.",
+                fullDesc: "Safe and efficient hauling of large appliances. We utilize proper strapping and padding to ensure no damage occurs during transport, whether we are delivering new units or hauling away old ones for recycling."
+            }
+        ];
+
+        // Modal Logic
+        function openProjectModal(index) {
+            const project = projectsData[index];
+            const modal = document.getElementById('project-modal');
+            const content = document.getElementById('modal-content');
+            
+            document.getElementById('modal-image').src = project.image;
+            document.getElementById('modal-category').textContent = project.category;
+            
+            const categoryBadge = document.getElementById('modal-category');
+            if(project.category === 'Landscaping') categoryBadge.className = "inline-block px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 backdrop-blur-sm border border-green-500/30 text-green-400 bg-green-500/10";
+            else if(['Handyman', 'Drywall', 'Assembly', 'Repairs', 'Hauling'].includes(project.category)) categoryBadge.className = "inline-block px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 backdrop-blur-sm border border-orange-500/30 text-orange-400 bg-orange-500/10";
+            else categoryBadge.className = "inline-block px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 backdrop-blur-sm border border-blue-500/30 text-blue-400 bg-blue-500/10";
+
+            document.getElementById('modal-title').textContent = project.title;
+            document.getElementById('modal-description').textContent = project.fullDesc;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Animation
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('project-modal');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        document.getElementById('project-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeProjectModal();
+        });
+
+        function getProjectsHTML() {
+            return projectsData.map((project, index) => `
+                <div onclick="openProjectModal(${index})" class="glass-panel rounded-2xl overflow-hidden hover-glow cursor-pointer group relative fade-in-up" style="animation-delay: ${index * 100}ms">
+                    <div class="h-64 bg-slate-800 relative overflow-hidden">
+                        <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"></div>
+                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 text-white text-xs font-bold px-3 py-1 rounded-full">
+                            ${project.category}
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <div class="bg-blue-600/90 text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                View Details
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 relative">
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">${project.title}</h3>
+                        <p class="text-slate-400 text-sm line-clamp-2 leading-relaxed">${project.shortDesc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        const pages = {
+            home: `
+                <!-- Advanced Hero Section -->
+                <div class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+                    <!-- Parallax Background fixed -->
+                    <div class="absolute inset-0 z-0">
+                        <img src="https://images.unsplash.com/photo-1622060929321-6d2d4b081628?q=80&w=2070&auto=format&fit=crop" alt="Background" class="w-full h-full object-cover opacity-20 fixed inset-0" style="z-index: -1;">
+                        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-slate-900/50 to-slate-900"></div>
+                    </div>
+                    
+                    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <div class="inline-block mb-6 px-4 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-sm font-bold tracking-widest uppercase fade-in-up">
+                            ★ PROUDLY SERVING OUR COMMUNITY ★
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-bold mb-8 text-white tracking-tight fade-in-up" style="animation-delay: 100ms">
+                            Ameri<br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Solutions</span>
+                        </h1>
+                        <p class="text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed fade-in-up" style="animation-delay: 200ms">
+                            The complete solution for your home and technology needs. Handyman, Landscaping, and IT Support under one roof.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-5 justify-center fade-in-up" style="animation-delay: 300ms">
+                            <button onclick="navigateTo('contact')" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-600/25 hover:scale-105 hover:shadow-blue-600/40">
+                                Get a Free Quote
+                            </button>
+                            <button onclick="navigateTo('projects')" class="px-8 py-4 glass-panel hover:bg-white/10 text-white rounded-xl font-bold transition-all hover:scale-105 border border-white/10">
+                                Explore Our Work
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services Overview -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                    <div class="text-center mb-16 fade-in-up">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Core Divisions</h2>
+                        <p class="text-slate-400 max-w-2xl mx-auto">Three specialized sectors. One unified standard of excellence.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Handyman -->
+                        <div class="glass-panel rounded-2xl overflow-hidden relative group fade-in-up hover-glow" style="animation-delay: 100ms">
+                            <!-- Background Image for Card -->
+                            <img src="Handyman.jpg" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/80"></div>
+                            
+                            <div class="relative z-10 p-8 text-center">
+                                <div class="w-16 h-16 mx-auto bg-orange-500/10 rounded-2xl flex items-center justify-center mb-6 border border-orange-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="hammer" class="w-8 h-8 text-orange-400"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-3">Handyman Services</h3>
+                                <p class="text-slate-200 mb-6 leading-relaxed font-medium">Professional repairs, installations, and maintenance for your home or office infrastructure.</p>
+                                <a href="#" onclick="navigateTo('services')" class="text-orange-400 font-bold text-sm flex items-center justify-center gap-2 group-hover:gap-3 transition-all">Learn More <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Landscaping -->
+                        <div class="glass-panel rounded-2xl overflow-hidden relative group fade-in-up hover-glow" style="animation-delay: 200ms">
+                             <!-- Background Image for Card -->
+                            <img src="Landscaping.jpg" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/80"></div>
+
+                            <div class="relative z-10 p-8 text-center">
+                                <div class="w-16 h-16 mx-auto bg-green-500/10 rounded-2xl flex items-center justify-center mb-6 border border-green-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="flower-2" class="w-8 h-8 text-green-400"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-3">Landscaping</h3>
+                                <p class="text-slate-200 mb-6 leading-relaxed font-medium">Transforming outdoor spaces into beautiful, sustainable environments with precision care.</p>
+                                <a href="#" onclick="navigateTo('services')" class="text-green-400 font-bold text-sm flex items-center justify-center gap-2 group-hover:gap-3 transition-all">Learn More <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- IT Support -->
+                        <div class="glass-panel rounded-2xl overflow-hidden relative group fade-in-up hover-glow" style="animation-delay: 300ms">
+                            <!-- Background Image for Card -->
+                            <img src="IT support.jpg" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/80"></div>
+
+                            <div class="relative z-10 p-8 text-center">
+                                <div class="w-16 h-16 mx-auto bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 border border-blue-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="wifi" class="w-8 h-8 text-blue-400"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-3">IT Support</h3>
+                                <p class="text-slate-200 mb-6 leading-relaxed font-medium">Expert technical support for digital ecosystems in homes and small businesses.</p>
+                                <a href="#" onclick="navigateTo('services')" class="text-blue-400 font-bold text-sm flex items-center justify-center gap-2 group-hover:gap-3 transition-all">Learn More <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            about: `
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-24">
+                    <!-- Intro & Mission -->
+                    <div class="glass-panel rounded-3xl p-10 md:p-16 fade-in-up relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+                        
+                        <div class="text-center max-w-3xl mx-auto mb-16 relative z-10">
+                            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">About Us</h2>
+                            <p class="text-xl text-slate-300 leading-relaxed">We are a unique hybrid service provider. Founded on the belief that homeowners and business owners shouldn't need three different numbers for three essential services.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+                            <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 group">
+                                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2084&auto=format&fit=crop" alt="Team meeting" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                                    <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Our Mission
+                                </h3>
+                                <p class="text-slate-400 mb-6 leading-relaxed">To provide reliable, high-quality service across physical and digital domains. Whether we are fixing a fence or fixing a firewall, our commitment to excellence remains the same.</p>
+                                
+                                <div class="space-y-6">
+                                    <div class="flex gap-5 p-4 glass-panel rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
+                                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-white text-lg">Licensed & Insured</h4>
+                                            <p class="text-sm text-slate-400 mt-1">Full coverage for all our service areas for your complete peace of mind.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-5 p-4 glass-panel rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-400">
+                                            <i data-lucide="users" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-white text-lg">Expert Teams</h4>
+                                            <p class="text-sm text-slate-400 mt-1">Specialized technicians for each division - no generalists pretending to be experts.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- How We Work -->
+                    <div class="fade-in-up">
+                        <div class="text-center mb-12">
+                             <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">How We Work</h2>
+                             <p class="text-slate-400 max-w-2xl mx-auto">A simple, transparent process designed around your needs.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                             <!-- Step 1 -->
+                             <div class="glass-panel p-8 rounded-2xl text-center relative group hover:bg-white/5 transition-colors">
+                                 <div class="w-16 h-16 mx-auto bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400 mb-6 border border-blue-500/30">
+                                     <i data-lucide="message-square" class="w-8 h-8"></i>
+                                 </div>
+                                 <h3 class="text-xl font-bold text-white mb-3">1. Consultation</h3>
+                                 <p class="text-slate-400 text-sm">We discuss your needs, assess the project, and provide a clear, competitive quote.</p>
+                             </div>
+                             <!-- Step 2 -->
+                             <div class="glass-panel p-8 rounded-2xl text-center relative group hover:bg-white/5 transition-colors">
+                                 <div class="w-16 h-16 mx-auto bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400 mb-6 border border-blue-500/30">
+                                     <i data-lucide="hammer" class="w-8 h-8"></i>
+                                 </div>
+                                 <h3 class="text-xl font-bold text-white mb-3">2. Execution</h3>
+                                 <p class="text-slate-400 text-sm">Our expert teams arrive on time, fully equipped, and complete the work to the highest standards.</p>
+                             </div>
+                             <!-- Step 3 -->
+                             <div class="glass-panel p-8 rounded-2xl text-center relative group hover:bg-white/5 transition-colors">
+                                 <div class="w-16 h-16 mx-auto bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400 mb-6 border border-blue-500/30">
+                                     <i data-lucide="smile" class="w-8 h-8"></i>
+                                 </div>
+                                 <h3 class="text-xl font-bold text-white mb-3">3. Satisfaction</h3>
+                                 <p class="text-slate-400 text-sm">We do a final walkthrough to ensure everything meets your expectations before we consider the job done.</p>
+                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Values -->
+                    <div class="fade-in-up">
+                        <div class="text-center mb-12">
+                             <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Core Values</h2>
+                             <p class="text-slate-400 max-w-2xl mx-auto">The principles that drive every decision we make.</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <!-- Value 1 -->
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-blue-500">
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-blue-500"></i> Dependability</h4>
+                                <p class="text-slate-400 text-sm">We arrive on time, deliver on our promises, and stand by our work.</p>
+                            </div>
+                            <!-- Value 2 -->
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-green-500">
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i> Integrity & Transparency</h4>
+                                <p class="text-slate-400 text-sm">We provide honest pricing, straightforward recommendations, and ethical service. No hidden fees.</p>
+                            </div>
+                            <!-- Value 3 -->
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-orange-500">
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="award" class="w-4 h-4 text-orange-500"></i> Quality Craftsmanship</h4>
+                                <p class="text-slate-400 text-sm">Every installation and repair meets the highest standards for excellence, precision, and durability.</p>
+                            </div>
+                            <!-- Value 4 -->
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-purple-500">
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="heart" class="w-4 h-4 text-purple-500"></i> Customer-Centered</h4>
+                                <p class="text-slate-400 text-sm">We listen, customize solutions, and ensure complete satisfaction before considering a job finished.</p>
+                            </div>
+                             <!-- Value 5 -->
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-cyan-500">
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-cyan-500"></i> Efficiency & Innovation</h4>
+                                <p class="text-slate-400 text-sm">We invest in top-tier tools, materials, and techniques to complete jobs quickly and effectively.</p>
+                            </div>
+                            <!-- Value 6 -->
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-red-500">
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 text-red-500"></i> Safety & Compliance</h4>
+                                <p class="text-slate-400 text-sm">We follow strict safety protocols and industry regulations, ensuring secure installations and repairs.</p>
+                            </div>
+                            <!-- Value 7 -->
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-yellow-500 sm:col-span-2 lg:col-span-1 xl:col-span-2">
+                                <h4 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-yellow-500"></i> Fairness & Respect</h4>
+                                <p class="text-slate-400 text-sm">We are committed to fairness and respect, ensuring every customer receives professional, reliable service.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            services: `
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                    <div class="text-center mb-16 fade-in-up">
+                        <h2 class="text-4xl font-bold text-white mb-4">Our Comprehensive Services</h2>
+                        <p class="text-lg text-slate-400">Ameri Solutions offers a diverse range of services to meet all your property and technology needs.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Handyman Card -->
+                        <div class="glass-panel rounded-2xl overflow-hidden relative group fade-in-up hover-glow" style="animation-delay: 100ms">
+                            <img src="Handyman.jpg" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/80"></div>
+                            
+                            <div class="relative z-10 p-8 text-center">
+                                <div class="w-20 h-20 mx-auto bg-gradient-to-br from-orange-500/20 to-orange-600/5 rounded-full flex items-center justify-center mb-6 border border-orange-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="hammer" class="w-10 h-10 text-orange-400"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-4">Handyman Services</h3>
+                                <p class="text-slate-100 mb-8 text-sm font-medium shadow-black drop-shadow-md">Reliable and efficient solutions for all your home and office repair and maintenance tasks. No job too big or too small, we handle it with care.</p>
+                                <ul class="text-left text-slate-300 text-sm space-y-3 w-full border-t border-white/10 pt-6">
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> General Home Repairs</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Furniture Assembly</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Drywall & Painting</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Fixture Installation</li>
+                                </ul>
+                                <button onclick="navigateTo('contact')" class="mt-8 w-full py-3 rounded-xl border border-orange-500/30 text-orange-400 hover:bg-orange-500 hover:text-white transition-all font-bold text-sm backdrop-blur-sm bg-black/20">Request Handyman Service</button>
+                            </div>
+                        </div>
+
+                        <!-- Landscaping Card -->
+                        <div class="glass-panel rounded-2xl overflow-hidden relative group fade-in-up hover-glow" style="animation-delay: 200ms">
+                            <img src="Landscaping.jpg" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/80"></div>
+
+                            <div class="relative z-10 p-8 text-center">
+                                <div class="w-20 h-20 mx-auto bg-gradient-to-br from-green-500/20 to-green-600/5 rounded-full flex items-center justify-center mb-6 border border-green-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="leaf" class="w-10 h-10 text-green-400"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-4">Landscaping</h3>
+                                <p class="text-slate-100 mb-8 text-sm font-medium shadow-black drop-shadow-md">From routine maintenance to complete garden makeovers, we create and sustain beautiful outdoor living spaces.</p>
+                                <ul class="text-left text-slate-300 text-sm space-y-3 w-full border-t border-white/10 pt-6">
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Lawn Mowing & Edging</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Garden Design & Planting</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Tree & Shrub Pruning</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Hardscaping</li>
+                                </ul>
+                                <button onclick="navigateTo('contact')" class="mt-8 w-full py-3 rounded-xl border border-green-500/30 text-green-400 hover:bg-green-500 hover:text-white transition-all font-bold text-sm backdrop-blur-sm bg-black/20">Schedule Landscaping</button>
+                            </div>
+                        </div>
+
+                        <!-- IT Support Card -->
+                        <div class="glass-panel rounded-2xl overflow-hidden relative group fade-in-up hover-glow" style="animation-delay: 300ms">
+                            <img src="IT support.jpg" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/80"></div>
+
+                            <div class="relative z-10 p-8 text-center">
+                                <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500/20 to-blue-600/5 rounded-full flex items-center justify-center mb-6 border border-blue-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="monitor" class="w-10 h-10 text-blue-400"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-4">IT Support</h3>
+                                <p class="text-slate-100 mb-8 text-sm font-medium shadow-black drop-shadow-md">Solving your tech challenges with expert advice and hands-on support for both residential and small business clients.</p>
+                                <ul class="text-left text-slate-300 text-sm space-y-3 w-full border-t border-white/10 pt-6">
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Computer Repair</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Network Optimization</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Data Recovery</li>
+                                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Smart Home Integration</li>
+                                </ul>
+                                <button onclick="navigateTo('contact')" class="mt-8 w-full py-3 rounded-xl border border-blue-500/30 text-blue-400 hover:bg-blue-500 hover:text-white transition-all font-bold text-sm backdrop-blur-sm bg-black/20">Get IT Help</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            projects: `
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                    <div class="text-center mb-16 fade-in-up">
+                        <p class="text-blue-400 font-medium italic text-lg mb-4">"Quality is not an act, it is a habit."</p>
+                        <h2 class="text-4xl font-bold text-white mb-4">Our Recent Work</h2>
+                        <p class="text-slate-400 mb-8">A showcase of our latest projects across handyman, landscaping, and technical services.</p>
+                        <span class="inline-block px-4 py-1 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium animate-pulse">
+                            Click any project to view details
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                         ${getProjectsHTML()}
+                    </div>
+                </div>
+            `,
+            contact: `
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 fade-in-up">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div class="space-y-8">
+                            <div>
+                                <h2 class="text-4xl font-bold text-white mb-6">Get in Touch</h2>
+                                <p class="text-slate-400 text-lg">Ready to start a project or need immediate support? Fill out the form or give us a call.</p>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-start gap-5 p-4 glass-panel rounded-2xl">
+                                    <div class="bg-blue-500/20 p-3 rounded-xl text-blue-400">
+                                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg">Our Office</h4>
+                                        <p class="text-slate-400">Clarksburg<br>Montgomery County, MD 20871</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-5 p-4 glass-panel rounded-2xl">
+                                    <div class="bg-green-500/20 p-3 rounded-xl text-green-400">
+                                        <i data-lucide="phone" class="w-6 h-6"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg">Phone</h4>
+                                        <p class="text-slate-400 text-lg font-mono">(202) 440-6897</p>
+                                
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-5 p-4 glass-panel rounded-2xl">
+                                    <div class="bg-purple-500/20 p-3 rounded-xl text-purple-400">
+                                        <i data-lucide="mail" class="w-6 h-6"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg">Email</h4>
+                                        <p class="text-slate-400">info@amerisolutions.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-panel p-8 md:p-10 rounded-3xl shadow-2xl border border-white/10">
+                            <form action="https://formspree.io/f/mldznlan" method="POST" class="space-y-6">
+                                <div class="grid grid-cols-1 gap-6">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Name</label>
+                                        <input type="text" name="name" class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all" placeholder="Your Name" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Email</label>
+                                        <input type="email" name="email" class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all" placeholder="you@example.com" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Service Required</label>
+                                        <select name="service" class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all appearance-none cursor-pointer">
+                                            <option class="bg-slate-800">General Handyman</option>
+                                            <option class="bg-slate-800">Landscaping</option>
+                                            <option class="bg-slate-800">IT Support</option>
+                                            <option class="bg-slate-800">Multiple Services</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Message</label>
+                                        <textarea name="message" rows="4" class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all" placeholder="Tell us about your project..."></textarea>
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold py-4 rounded-xl transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-600/30">
+                                    Send Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        function navigateTo(pageId) {
+            const contentArea = document.getElementById('content-area');
+            if (pages[pageId]) {
+                window.scrollTo(0, 0);
+                contentArea.innerHTML = pages[pageId];
+                
+                document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+                const activeBtn = document.getElementById(`nav-${pageId}`);
+                if(activeBtn) activeBtn.classList.add('active');
+
+                lucide.createIcons();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            navigateTo('home');
+        });
+
+    </script>
+</body>
+</html>
